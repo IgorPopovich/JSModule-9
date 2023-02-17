@@ -126,6 +126,7 @@ start.addEventListener('click', () => {
     } else {
       clearInterval(interal);
       miliseconds = 0;
+      start.disabled = true;
     }
   }, 1000);
 
