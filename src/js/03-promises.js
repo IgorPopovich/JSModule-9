@@ -5,6 +5,7 @@ let step = document.querySelector('input[name="step"]');
 let amount = document.querySelector('input[name="amount"]');
 let btnSubmit = document.querySelector('button[type="submit"]');
 let count = 1;
+let num = 0;
 
 function createPromise( position, delay ) {
   return new Promise(( resolve, reject ) => {
@@ -18,29 +19,32 @@ function createPromise( position, delay ) {
 })}
 
 function stopFunc () {
-  count = 0
-  delay.value = ''
-  step.value = ''
-  amount.value = ''
+  count = 0;
+  delay.value = '';
+  step.value = '';
+  amount.value = '';
+  num = 0;
 }
 
-
 btnSubmit.addEventListener('click', (event) => {
+  num = Number(delay.value)
   event.preventDefault();
   setTimeout(() => {
 
-    createPromise(count, step.value)
+    createPromise(count, num)
     .then(({ position, delay }) => {
         Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
         count++
+        num += Number(step.value)
     })
     .catch(({ position, delay }) => {
         Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
         count++
+        num += Number(step.value)
     })
 
     let timerId = setInterval(() => 
-    createPromise(count, step.value)
+    createPromise(count, num)
     .then(({ position, delay }) => {
       if (count >= amount.value) {
         clearInterval(timerId); 
@@ -48,6 +52,7 @@ btnSubmit.addEventListener('click', (event) => {
       }
         Notiflix.Notify.success(`✅ Fulfilled promise ${position} in ${delay}ms`);
         count++
+        num += Number(step.value)
     })
     .catch(({ position, delay }) => {
       if (count >= amount.value) {
@@ -56,6 +61,7 @@ btnSubmit.addEventListener('click', (event) => {
       }
         Notiflix.Notify.failure(`❌ Rejected promise ${position} in ${delay}ms`);
         count++
+        num += Number(step.value)
     }), step.value);
   },  delay.value)
 })
